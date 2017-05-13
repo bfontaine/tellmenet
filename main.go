@@ -14,9 +14,13 @@ func main() {
 
 	flag.Parse()
 
-	bind := fmt.Sprintf("%s:%d", *bindAddress, *bindPort)
+	bind, err := net.ResolveTCPAddr("tcp",
+		fmt.Sprintf("%s:%d", *bindAddress, *bindPort))
+	if err != nil {
+		log.Fatalf("Cannot resolve %s: %v", bind, err)
+	}
 
-	l, err := net.Listen("tcp", bind)
+	l, err := net.ListenTCP("tcp", bind)
 	if err != nil {
 		log.Fatalf("Cannot bind on %s: %v", bind, err)
 	}
@@ -25,7 +29,7 @@ func main() {
 	log.Printf("Listening on %s", bind)
 
 	for {
-		conn, err := l.Accept()
+		conn, err := l.AcceptTCP()
 		if err != nil {
 			log.Fatalf("Can't accept: %v", err)
 		}
