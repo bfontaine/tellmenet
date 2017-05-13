@@ -1,8 +1,8 @@
 # tel[l me ]net
 
-`tellmenet` is an experimental TCP server that writes everything it knows about
-a connection when it’s opened, then close it.
+`tellmenet` is a small TCP server that writes everything it knows about a
+connection when it’s opened, then closes it.
 
-It is intended to be used with `telnet`:
+A live version runs at `whoami.bfontaine.net`:
 
-    $ telnet <yourdomain>
+    $ telnet whoami.bfontaine.net
