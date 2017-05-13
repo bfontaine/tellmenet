@@ -14,13 +14,9 @@ func main() {
 
 	flag.Parse()
 
-	bind, err := net.ResolveTCPAddr("tcp",
-		fmt.Sprintf("%s:%d", *bindAddress, *bindPort))
-	if err != nil {
-		log.Fatalf("Cannot resolve %s: %v", bind, err)
-	}
+	bind := fmt.Sprintf("%s:%d", *bindAddress, *bindPort)
 
-	l, err := net.ListenTCP("tcp", bind)
+	l, err := net.Listen("tcp", bind)
 	if err != nil {
 		log.Fatalf("Cannot bind on %s: %v", bind, err)
 	}
@@ -29,7 +25,7 @@ func main() {
 	log.Printf("Listening on %s", bind)
 
 	for {
-		conn, err := l.AcceptTCP()
+		conn, err := l.Accept()
 		if err != nil {
 			log.Fatalf("Can't accept: %v", err)
 		}
@@ -48,18 +44,34 @@ func handleRequest(conn net.Conn) {
 func connInfos(conn net.Conn) []byte {
 	var buff bytes.Buffer
 
-	writeField := func(name, value string) {
-		buff.Write([]byte(fmt.Sprintf("%s: %s\n", name, value)))
+	writeField := func(name, value interface{}) {
+		buff.Write([]byte(fmt.Sprintf("%s: %v\n", name, value)))
 	}
 
 	remote := conn.RemoteAddr()
+
+	writeField("Network", remote.Network())
+
 	if host, port, err := net.SplitHostPort(remote.String()); err == nil {
-		writeField("Remote IP", host)
-		writeField("Remote Port", port)
+		ip := net.ParseIP(host)
+
+		writeField("IP", ip)
+		writeField("Global unicast", ip.IsGlobalUnicast())
+		writeField("Multicast", ip.IsMulticast())
+		writeField("Interface-local multicast", ip.IsInterfaceLocalMulticast())
+		writeField("Link-local multicast", ip.IsLinkLocalMulticast())
+		writeField("Link-local unicast", ip.IsLinkLocalUnicast())
+		writeField("Loopback", ip.IsLoopback())
+		writeField("Port", port)
 
 		if names, err := net.LookupAddr(host); err == nil && len(names) > 0 {
 			if len(names) == 1 {
-				writeField("Remote Name", names[0])
+				writeField("Name", names[0])
+			} else {
+				buff.Write([]byte("Names:\n"))
+				for _, name := range names {
+					buff.Write([]byte(fmt.Sprintf("  %s\n", name)))
+				}
 			}
 		}
 	}
