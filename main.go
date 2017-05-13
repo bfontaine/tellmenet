@@ -45,7 +45,7 @@ func connInfos(conn net.Conn) []byte {
 	var buff bytes.Buffer
 
 	writeField := func(name, value interface{}) {
-		buff.Write([]byte(fmt.Sprintf("%s: %v\n", name, value)))
+		fmt.Fprintf(&buff, "%s: %v\n", name, value)
 	}
 
 	remote := conn.RemoteAddr()
