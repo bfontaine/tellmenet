@@ -16,3 +16,8 @@ A live version runs at `whoami.bfontaine.net`, e.g.:
     Link-local unicast: false
     Loopback: false
     Port: 59683
+
+## Usage
+
+The default is to listen for connection on the port 23 (telnet). Note you need
+to be `sudo` in order to run it in a port <1000.
