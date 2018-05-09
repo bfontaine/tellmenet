@@ -1,0 +1,5 @@
+{
+	"ImportPath": "github.com/bfontaine/tellmenet",
+	"GoVersion": "go1.10.2",
+	"Deps": []
+}
