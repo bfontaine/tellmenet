@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
+	"strconv"
 )
 
 func main() {
@@ -13,6 +15,13 @@ func main() {
 	var bindPort = flag.Int("port", 23, "port")
 
 	flag.Parse()
+
+	if *bindPort < 1 {
+		p, err := strconv.ParseInt(os.Getenv("PORT"), 10, 64)
+		if err == nil {
+			*bindPort = int(p)
+		}
+	}
 
 	bind := fmt.Sprintf("%s:%d", *bindAddress, *bindPort)
 

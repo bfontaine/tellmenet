@@ -19,5 +19,16 @@ A live version runs at `whoami.bfontaine.net`, e.g.:
 
 ## Usage
 
+```
+Usage of ./tellmenet:
+  -bind string
+        bind address (default "0.0.0.0")
+  -port int
+        port (default 23)
+```
+
 The default is to listen for connection on the port 23 (telnet). Note you need
 to be `sudo` in order to run it in a port <1000.
+
+If you pass a negative port, it’ll try to get one from the `PORT` environment
+variable.
