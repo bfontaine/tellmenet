@@ -3,7 +3,7 @@
 `tellmenet` is a small TCP server that writes everything it knows about a
 connection when it’s opened, then closes it.
 
-A live version runs at `whoami.bfontaine.net`, e.g.:
+A live version used to run at `whoami.bfontaine.net`, e.g.:
 
     $ telnet whoami.bfontaine.net
     ...
@@ -30,5 +30,5 @@ Usage of ./tellmenet:
 The default is to listen for connection on the port 23 (telnet). Note you need
 to be `sudo` in order to run it in a port <1000.
 
-If you pass a negative port, it’ll try to get one from the `PORT` environment
+If you pass a negative port, it tries to get one from the `PORT` environment
 variable.
